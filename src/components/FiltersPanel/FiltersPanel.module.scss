@@ -1,0 +1,51 @@
+@use '../../styles/variables' as *;
+
+.panel {
+  @include card-panel;
+  padding: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 140px;
+  flex: 1;
+}
+
+.label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.select {
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid $border-subtle;
+  border-radius: $radius-sm;
+  color: $text-primary;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color $transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: $accent-gold;
+  }
+
+  option {
+    background: $bg-secondary;
+    color: $text-primary;
+  }
+}
+
+@include respond($bp-md) {
+  .panel { flex-direction: column; }
+}

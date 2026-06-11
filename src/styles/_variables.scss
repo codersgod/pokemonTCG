@@ -1,0 +1,67 @@
+// ─── Design Tokens ───
+
+$bg-primary: #0b0f17;
+$bg-secondary: #111827;
+$bg-card: rgba(17, 24, 39, 0.7);
+$bg-glass: rgba(255, 255, 255, 0.05);
+
+$border-subtle: rgba(255, 255, 255, 0.08);
+$border-glow: rgba(234, 179, 8, 0.3);
+
+$text-primary: #f1f5f9;
+$text-secondary: #94a3b8;
+$text-muted: #64748b;
+
+$accent-gold: #eab308;
+$accent-gold-light: #fbbf24;
+$accent-blue: #3b82f6;
+$accent-red: #ef4444;
+$accent-green: #22c55e;
+
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+$shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+$shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+$shadow-glow: 0 0 20px rgba(234, 179, 8, 0.15);
+
+$transition-fast: 150ms ease;
+$transition-normal: 250ms ease;
+$transition-slow: 400ms ease;
+
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+
+// ─── Mixins ───
+
+@mixin glass($blur: 12px) {
+  background: $bg-glass;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid $border-subtle;
+}
+
+@mixin card-panel {
+  @include glass;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+@mixin respond($bp) {
+  @media (max-width: $bp) {
+    @content;
+  }
+}
+
+@mixin hover-lift {
+  transition: transform $transition-normal, box-shadow $transition-normal;
+  &:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: $shadow-lg;
+  }
+}

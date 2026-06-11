@@ -1,0 +1,152 @@
+@use '../styles/variables' as *;
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// ─── Quick Nav ───
+
+.quickNav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+
+  @include respond($bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.quickCard {
+  @include card-panel;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  transition: all $transition-normal;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: $border-glow;
+    box-shadow: $shadow-glow;
+  }
+}
+
+.quickIcon {
+  font-size: 1.75rem;
+}
+
+.quickLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $text-secondary;
+}
+
+// ─── Sections ───
+
+.section {
+  margin-bottom: 2.5rem;
+  animation: slideUp 500ms ease backwards;
+
+  &:nth-child(3) { animation-delay: 100ms; }
+  &:nth-child(4) { animation-delay: 200ms; }
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+// ─── Sets Grid ───
+
+.setsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  @include respond($bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include respond($bp-sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.setCard {
+  @include card-panel;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  @include hover-lift;
+}
+
+.setLogo {
+  width: 80px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.setLogoImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.setInfo {
+  min-width: 0;
+}
+
+.setName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.setMeta {
+  font-size: 0.7rem;
+  color: $text-muted;
+  margin-top: 0.125rem;
+}
+
+// ─── About ───
+
+.about {
+  @include card-panel;
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.aboutTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, $accent-gold, $accent-gold-light);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.aboutText {
+  color: $text-secondary;
+  font-size: 0.875rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}

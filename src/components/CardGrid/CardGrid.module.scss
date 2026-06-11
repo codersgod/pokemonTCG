@@ -1,0 +1,30 @@
+@use '../../styles/variables' as *;
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+
+  @include respond($bp-lg) {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  @include respond($bp-sm) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: $text-muted;
+  font-size: 0.875rem;
+}
+
+.loadMore {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem;
+}

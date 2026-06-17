@@ -10,6 +10,7 @@ import { useCollection } from '@/lib/context/CollectionContext';
 import TiltCard from '@/components/TiltCard/TiltCard';
 import BackgroundEffects from '@/components/BackgroundEffects/BackgroundEffects';
 import Button from '@/components/Button/Button';
+import PricingAnalytics from '@/components/PricingAnalytics/PricingAnalytics';
 import styles from './card.module.scss';
 
 function formatPrice(val: number | undefined, currency = '$') {
@@ -142,7 +143,123 @@ export default function CardDetailClient() {
             )}
           </div>
 
-          {/* ── Prices Section ── */}
+       
+
+          {/* ── Abilities ── */}
+          {hasAbilities && (
+            <div className={styles.sectionBlock}>
+              <h2 className={styles.sectionTitle}>Abilities</h2>
+              {card.abilities!.map((a) => (
+                <div key={a.name} className={styles.abilityRow}>
+                  <div className={styles.abilityHeader}>
+                    <span className={styles.abilityType} style={{ color: typeColor.accent }}>{a.type}</span>
+                    <strong className={styles.abilityName}>{a.name}</strong>
+                  </div>
+                  <p className={styles.abilityText}>{a.text}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ── Attacks ── */}
+          {hasAttacks && (
+            <div className={styles.sectionBlock}>
+              <h2 className={styles.sectionTitle}>Attacks</h2>
+              {card.attacks!.map((a) => (
+                <div key={a.name} className={styles.attackRow}>
+                  <div className={styles.attackHead}>
+                    <div className={styles.attackLeft}>
+                      <span className={styles.attackCost}>{a.cost.join(' · ')}</span>
+                      <span className={styles.attackName}>{a.name}</span>
+                    </div>
+                    {a.damage && (
+                      <span className={styles.attackDmg} style={{ color: typeColor.accent }}>
+                        {a.damage}
+                      </span>
+                    )}
+                  </div>
+                  {a.text && <p className={styles.attackDesc}>{a.text}</p>}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ── Combat Stats (weakness / resistance / retreat) ── */}
+          <div className={styles.combatGrid}>
+            <div className={styles.combatItem}>
+              <span className={styles.combatLabel}>weakness</span>
+              <span className={styles.combatValue}>
+                {card.weaknesses && card.weaknesses.length > 0
+                  ? card.weaknesses.map((w) => `${w.type} ${w.value}`).join(', ')
+                  : 'N/A'}
+              </span>
+            </div>
+            <div className={styles.combatItem}>
+              <span className={styles.combatLabel}>resistance</span>
+              <span className={styles.combatValue}>
+                {card.resistances && card.resistances.length > 0
+                  ? card.resistances.map((r) => `${r.type} ${r.value}`).join(', ')
+                  : 'N/A'}
+              </span>
+            </div>
+            <div className={styles.combatItem}>
+              <span className={styles.combatLabel}>retreat cost</span>
+              <span className={styles.combatValue}>
+                {card.retreatCost ? card.retreatCost.join(' · ') : 'N/A'}
+              </span>
+            </div>
+          </div>
+
+          {/* ── Card Meta ── */}
+          <div className={styles.metaGrid}>
+            {card.artist && (
+              <div className={styles.metaItem}>
+                <span className={styles.metaLabel}>artist</span>
+                <span className={styles.metaValue}>{card.artist}</span>
+              </div>
+            )}
+            {card.rarity && (
+              <div className={styles.metaItem}>
+                <span className={styles.metaLabel}>rarity</span>
+                <span className={styles.metaValue}>{card.rarity}</span>
+              </div>
+            )}
+            <div className={styles.metaItem}>
+              <span className={styles.metaLabel}>set</span>
+              <Link href={`/sets/${card.set.id}`} className={styles.metaLink}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={card.set.images.symbol} alt={card.set.name} className={styles.setSymbol} />
+                {card.set.name}
+              </Link>
+            </div>
+            <div className={styles.metaItem}>
+              <span className={styles.metaLabel}>number</span>
+              <span className={styles.metaValue}>{card.number} / {card.set.printedTotal}</span>
+            </div>
+            {card.nationalPokedexNumbers && card.nationalPokedexNumbers.length > 0 && (
+              <div className={styles.metaItem}>
+                <span className={styles.metaLabel}>pokédex</span>
+                <span className={styles.metaValue}>#{card.nationalPokedexNumbers.join(', #')}</span>
+              </div>
+            )}
+          </div>
+
+          {/* ── Flavor Text ── */}
+          {card.flavorText && (
+            <p className={styles.flavor}>&ldquo;{card.flavorText}&rdquo;</p>
+          )}
+
+          {/* ── Rules ── */}
+          {hasRules && (
+            <div className={styles.sectionBlock}>
+              <h2 className={styles.sectionTitle}>Rules</h2>
+              {card.rules!.map((rule, i) => (
+                <p key={i} className={styles.ruleText}>{rule}</p>
+              ))}
+            </div>
+          )}
+
+   {/* ── Prices Section ── */}
           {(card.tcgplayer || card.cardmarket) && (
             <div className={styles.priceSection}>
               <h2 className={styles.sectionTitle}>Prices</h2>
@@ -263,119 +380,15 @@ export default function CardDetailClient() {
             </div>
           )}
 
-          {/* ── Abilities ── */}
-          {hasAbilities && (
-            <div className={styles.sectionBlock}>
-              <h2 className={styles.sectionTitle}>Abilities</h2>
-              {card.abilities!.map((a) => (
-                <div key={a.name} className={styles.abilityRow}>
-                  <div className={styles.abilityHeader}>
-                    <span className={styles.abilityType} style={{ color: typeColor.accent }}>{a.type}</span>
-                    <strong className={styles.abilityName}>{a.name}</strong>
-                  </div>
-                  <p className={styles.abilityText}>{a.text}</p>
-                </div>
-              ))}
-            </div>
-          )}
+          {/* ── Price Analytics ── */}
+          <PricingAnalytics
+            cardId={card.id}
+            cardName={card.name}
+            setName={card.set.name}
+            cardNumber={card.number}
+            typeColor={typeColor}
+          />
 
-          {/* ── Attacks ── */}
-          {hasAttacks && (
-            <div className={styles.sectionBlock}>
-              <h2 className={styles.sectionTitle}>Attacks</h2>
-              {card.attacks!.map((a) => (
-                <div key={a.name} className={styles.attackRow}>
-                  <div className={styles.attackHead}>
-                    <div className={styles.attackLeft}>
-                      <span className={styles.attackCost}>{a.cost.join(' · ')}</span>
-                      <span className={styles.attackName}>{a.name}</span>
-                    </div>
-                    {a.damage && (
-                      <span className={styles.attackDmg} style={{ color: typeColor.accent }}>
-                        {a.damage}
-                      </span>
-                    )}
-                  </div>
-                  {a.text && <p className={styles.attackDesc}>{a.text}</p>}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* ── Combat Stats (weakness / resistance / retreat) ── */}
-          <div className={styles.combatGrid}>
-            <div className={styles.combatItem}>
-              <span className={styles.combatLabel}>weakness</span>
-              <span className={styles.combatValue}>
-                {card.weaknesses && card.weaknesses.length > 0
-                  ? card.weaknesses.map((w) => `${w.type} ${w.value}`).join(', ')
-                  : 'N/A'}
-              </span>
-            </div>
-            <div className={styles.combatItem}>
-              <span className={styles.combatLabel}>resistance</span>
-              <span className={styles.combatValue}>
-                {card.resistances && card.resistances.length > 0
-                  ? card.resistances.map((r) => `${r.type} ${r.value}`).join(', ')
-                  : 'N/A'}
-              </span>
-            </div>
-            <div className={styles.combatItem}>
-              <span className={styles.combatLabel}>retreat cost</span>
-              <span className={styles.combatValue}>
-                {card.retreatCost ? card.retreatCost.join(' · ') : 'N/A'}
-              </span>
-            </div>
-          </div>
-
-          {/* ── Card Meta ── */}
-          <div className={styles.metaGrid}>
-            {card.artist && (
-              <div className={styles.metaItem}>
-                <span className={styles.metaLabel}>artist</span>
-                <span className={styles.metaValue}>{card.artist}</span>
-              </div>
-            )}
-            {card.rarity && (
-              <div className={styles.metaItem}>
-                <span className={styles.metaLabel}>rarity</span>
-                <span className={styles.metaValue}>{card.rarity}</span>
-              </div>
-            )}
-            <div className={styles.metaItem}>
-              <span className={styles.metaLabel}>set</span>
-              <Link href={`/sets/${card.set.id}`} className={styles.metaLink}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={card.set.images.symbol} alt={card.set.name} className={styles.setSymbol} />
-                {card.set.name}
-              </Link>
-            </div>
-            <div className={styles.metaItem}>
-              <span className={styles.metaLabel}>number</span>
-              <span className={styles.metaValue}>{card.number} / {card.set.printedTotal}</span>
-            </div>
-            {card.nationalPokedexNumbers && card.nationalPokedexNumbers.length > 0 && (
-              <div className={styles.metaItem}>
-                <span className={styles.metaLabel}>pokédex</span>
-                <span className={styles.metaValue}>#{card.nationalPokedexNumbers.join(', #')}</span>
-              </div>
-            )}
-          </div>
-
-          {/* ── Flavor Text ── */}
-          {card.flavorText && (
-            <p className={styles.flavor}>&ldquo;{card.flavorText}&rdquo;</p>
-          )}
-
-          {/* ── Rules ── */}
-          {hasRules && (
-            <div className={styles.sectionBlock}>
-              <h2 className={styles.sectionTitle}>Rules</h2>
-              {card.rules!.map((rule, i) => (
-                <p key={i} className={styles.ruleText}>{rule}</p>
-              ))}
-            </div>
-          )}
 
           {/* ── Legalities ── */}
           {card.legalities && (
